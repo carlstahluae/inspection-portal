@@ -1,53 +1,309 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Inspection Portal</title>
+
+    <!-- Favicon -->
     <link
       rel="icon"
       type="image/x-icon"
       href="https://www.carlstahl.com/images/favicon.ico"
     />
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body,
       html {
         margin: 0;
         padding: 0;
         height: 100%;
+        width: 100%;
+        overflow: hidden;
         display: flex;
         flex-direction: column;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+          Cantarell, sans-serif;
       }
+
+      /* News Ticker Bar */
+      .news-ticker {
+        background: linear-gradient(135deg, #700000 0%, #590202 100%);
+        color: #ffffff;
+        padding: 10px 0;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 20;
+        width: 100%;
+      }
+
+      .news-ticker-wrapper {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        will-change: transform;
+      }
+
+      .news-ticker-content {
+        display: inline-flex;
+        align-items: center;
+        animation: scroll-left 50s linear infinite;
+      }
+
+      .news-ticker-text {
+        display: inline-flex;
+        align-items: center;
+        padding: 0 50px;
+        font-size: 16px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+      }
+
+      .news-icon {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 4px 12px;
+        border-radius: 4px;
+        margin-right: 15px;
+        font-weight: 700;
+        font-size: 14px;
+        text-transform: uppercase;
+      }
+
+      @keyframes scroll-left {
+        0% {
+          transform: translateX(100%);
+        }
+        100% {
+          transform: translateX(-100%);
+        }
+      }
+
+      /* Pause animation on hover */
+      .news-ticker:hover .news-ticker-content {
+        animation-play-state: paused;
+      }
+
       iframe {
-        flex: 1; /* Take remaining space */
+        flex: 1;
         border: none;
+        width: 100%;
+        height: 100%;
       }
+
       .logo-container {
         text-align: center;
-        padding: 10px;
-        background: #fff; /* optional: give a background */
+        padding: 12px 10px;
+        background: #fff;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 10;
       }
+
       .logo-container img {
-        height: 60px; /* Adjust size as needed */
+        height: 50px;
+        max-width: 90%;
+        object-fit: contain;
       }
+
+      /* Mobile optimizations */
+      @media (max-width: 768px) {
+        .news-ticker {
+          padding: 8px 0;
+        }
+
+        .news-ticker-text {
+          font-size: 14px;
+          padding: 0 30px;
+        }
+
+        .news-icon {
+          font-size: 12px;
+          padding: 3px 10px;
+        }
+
+        .logo-container {
+          padding: 8px 5px;
+        }
+
+        .logo-container img {
+          height: 40px;
+        }
+
+        @keyframes scroll-left {
+          0% {
+            transform: translateX(100%);
+          }
+          100% {
+            transform: translateX(-100%);
+          }
+        }
+      }
+
+      @media (max-width: 480px) {
+        .news-ticker {
+          padding: 6px 0;
+        }
+
+        .news-ticker-text {
+          font-size: 13px;
+          padding: 0 20px;
+        }
+
+        .news-icon {
+          font-size: 11px;
+          padding: 2px 8px;
+          margin-right: 10px;
+        }
+
+        .logo-container {
+          padding: 6px 5px;
+        }
+
+        .logo-container img {
+          height: 35px;
+        }
+      }
+
+      /* Prevent zoom on input focus (iOS) */
+      @media (max-width: 768px) {
+        input,
+        select,
+        textarea {
+          font-size: 16px !important;
+        }
+      }
+
+      /* Loading state */
+      .loading {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 18px;
+        color: #666;
     </style>
   </head>
   <body>
+    <!-- News Ticker Bar -->
+    <div class="news-ticker">
+      <div class="news-ticker-wrapper">
+        <div class="news-ticker-content">
+          <div class="news-ticker-text">
+            <span class="news-icon">🔔 Update / Alert</span>
+            This page is for official certificate verification purposes only
+          </div>
+          <div class="news-ticker-text">
+            <span class="news-icon">ℹ️ Information</span>
+            If you experience any issues with certificate verification or have
+            questions about the authenticity of a certificate, please contact
+            our certificate support team at certificates@carlstahl.ae
+          </div>
+          <div class="news-ticker-text">
+            <span class="news-icon">🔔 Update / Alert</span>
+            This page is for official certificate verification purposes only
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="loading" id="loading">
+      Loading Carl Stahl Inspection Certificates Verification Portal...
+    </div>
+
     <iframe
-      src="https://script.google.com/macros/s/AKfycbzJM-i9xpmNDlWZd1v2HRFF2PDIbyjjBYBAAt6FYJg2j_7vJUMa4-wm5Q0tCwtvsyPL4A/exec"
+      id="mainIframe"
+      src="https://script.google.com/macros/s/AKfycbyPjgxr9tls-jVRc1If3bNunS4gmOFoJqOelQ-4H3wr3hd5wQCUoQkjtWXPV6IAbjXYQA/exec"
       allowfullscreen="true"
+      allow="
+        accelerometer;
+        autoplay;
+        clipboard-write;
+        encrypted-media;
+        gyroscope;
+        picture-in-picture;
+      "
+      loading="lazy"
     >
     </iframe>
 
     <script>
+      // Remove loading indicator when iframe loads
+      const iframe = document.getElementById("mainIframe");
+      const loading = document.getElementById("loading");
+
+      iframe.addEventListener("load", function () {
+        if (loading) {
+          loading.style.display = "none";
+        }
+      });
+
+      // Fullscreen functionality (works on user interaction)
       window.onload = function () {
-        document
-          .querySelector("iframe")
-          .requestFullscreen()
-          .catch((err) => {
-            console.error(
-              `Error attempting to enable full-screen mode: ${err.message}`,
-            );
-          });
+        // Note: Fullscreen API requires user interaction on most mobile browsers
+        // Auto-fullscreen on load may not work on mobile devices
+        const requestFullscreen = () => {
+          const elem = document.documentElement;
+          if (elem.requestFullscreen) {
+            elem.requestFullscreen().catch((err) => {
+              console.log(`Fullscreen not available: ${err.message}`);
+            });
+          } else if (elem.webkitRequestFullscreen) {
+            /* Safari */
+            elem.webkitRequestFullscreen();
+          } else if (elem.msRequestFullscreen) {
+            /* IE11 */
+            elem.msRequestFullscreen();
+          }
+        };
+
+        // Attempt fullscreen (may not work without user interaction)
+        requestFullscreen();
+
+        // Alternative: Add a button for user to trigger fullscreen
+        document.body.addEventListener(
+          "click",
+          function (e) {
+            if (e.target.classList.contains("fullscreen-trigger")) {
+              requestFullscreen();
+            }
+          },
+          { once: true },
+        );
       };
+
+      // Prevent pull-to-refresh on mobile
+      let touchStartY = 0;
+      document.addEventListener(
+        "touchstart",
+        (e) => {
+          touchStartY = e.touches[0].clientY;
+        },
+        { passive: false },
+      );
+
+      document.addEventListener(
+        "touchmove",
+        (e) => {
+          const touchY = e.touches[0].clientY;
+          const touchDiff = touchY - touchStartY;
+
+          if (touchDiff > 0 && window.scrollY === 0) {
+            e.preventDefault();
+          }
+        },
+        { passive: false },
+      );
     </script>
   </body>
 </html>
